@@ -16,18 +16,13 @@
 #ifndef SMIF_CONFIG_H
 #define SMIF_CONFIG_H
 
-/*
-    Макросы для указания I/O МК под управления котроллером
- вращения ДПТ (BTS7960)
-*/
-
-#define PIN_R_PWM 9     // Сигнал PWM для вращения по часовой
-#define PIN_L_PWM 10    // Сигнал PWM для вращения против часовой   //
-#define PIN_R_EN 0      // Сигнал EN для вращения по часовой
-#define PIN_L_EN 0      // Сигнал EN для вращения против часовой
-#define PIN_R_IS 0      // Сигнал IS при вращении по часовой
-#define PIN_L_IS 0      // Сигнал IS при вращении против часовой
+// include library to read and write from flash memory
+#include <EEPROM.h>
 
 // Переменная для получения команд от пользователя
-static volatile int motion_type = 0;       
+static volatile int motion_type = 0;
+
+// define the number of bytes you want to access
+#define EEPROM_SIZE 25
+
 #endif

@@ -12,7 +12,10 @@
 
 // Подключение заголовочного файла с объявлением функций и структур
 #include "smif_func_test.h"
+//подключение библиотеки математичесских формул для расчёта коэфициента скорости при повороте по заданному радиусу
 #include <cmath>
+
+
 
 // Функция выполнения вращения
 void motorMove(const driver_pins *bts7960_pins,
@@ -85,6 +88,37 @@ void motorStop(const driver_pins *bts7960_pins,
 // Функция инициализции данных и настройки I/O
 void driversInit(motorDrivers_param *moveData, motor_driver_func *moveFunc)
 {
+    // initialize EEPROM with predefined size
+    EEPROM.begin(EEPROM_SIZE);
+    moveData->driver_pins[0]->l_pwm = EEPROM.read(1);
+    moveData->driver_pins[0]->r_pwm = EEPROM.read(2);
+    moveData->driver_pins[0]->l_en = EEPROM.read(3);
+    moveData->driver_pins[0]->r_en = EEPROM.read(4);
+    moveData->driver_pins[0]->l_is = EEPROM.read(5);
+    moveData->driver_pins[0]->r_is = EEPROM.read(6);
+
+    moveData->driver_pins[1]->l_pwm = EEPROM.read(7);
+    moveData->driver_pins[1]->r_pwm = EEPROM.read(8);
+    moveData->driver_pins[1]->l_en = EEPROM.read(9);
+    moveData->driver_pins[1]->r_en = EEPROM.read(10);
+    moveData->driver_pins[1]->l_is = EEPROM.read(11);
+    moveData->driver_pins[1]->r_is = EEPROM.read(12);
+
+    moveData->driver_pins[2]->l_pwm = EEPROM.read(13);
+    moveData->driver_pins[2]->r_pwm = EEPROM.read(14);
+    moveData->driver_pins[2]->l_en = EEPROM.read(15);
+    moveData->driver_pins[2]->r_en = EEPROM.read(16);
+    moveData->driver_pins[2]->l_is = EEPROM.read(17);
+    moveData->driver_pins[2]->r_is = EEPROM.read(18);
+
+    moveData->driver_pins[3]->l_pwm = EEPROM.read(19);
+    moveData->driver_pins[3]->r_pwm = EEPROM.read(20);
+    moveData->driver_pins[3]->l_en = EEPROM.read(21);
+    moveData->driver_pins[3]->r_en = EEPROM.read(22);
+    moveData->driver_pins[3]->l_is = EEPROM.read(23);
+    moveData->driver_pins[3]->r_is = EEPROM.read(24);
+
+
     // Настройка работы I/O, используемых для контроллера ДПТ
     pinMode(moveData->driver_pins[0]->l_pwm, OUTPUT);
     pinMode(moveData->driver_pins[0]->r_pwm, OUTPUT);
