@@ -690,7 +690,7 @@ void driversTLB(motorDrivers_param *moveData)
 }
 
 // Функция поворота направо-назад
-void driversTRF(motorDrivers_param *moveData)
+void driversTRB(motorDrivers_param *moveData)
 {
 
     // Условие для запуска вращения вала ДПТ

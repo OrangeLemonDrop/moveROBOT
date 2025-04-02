@@ -130,10 +130,26 @@ typedef struct
     void (*init)(motorDrivers_param*, motor_driver_func*);
     // Функция остановки вращения
     void (*stop)(motorDrivers_param*);
-    // Функция запуска вращения по часовой
+    // Функция запуска движения робота вперёд
     void (*forward)(motorDrivers_param*);
-    // Функция запуска вращения против часовой
+    // Функция запуска движения робота назад
     void (*backward)(motorDrivers_param*);
+    //Функция запуска вращения робота вокруг своей оси против часовой
+    void (*spin_left)(motorDrivers_param*);
+    //Функция запуска вращения робота вокруг своей оси по часовой
+    void (*spin_right)(motorDrivers_param*);
+    //Функция движения робота по радиусу влево-вперёд
+    void (*turn_left_forward)(motorDrivers_param*);
+    //Функция движения робота по радиусу вправо-вперёд
+    void (*turn_right_forward)(motorDrivers_param*);
+    //Функция движения робота по радиусу влево-назад
+    void (*turn_left_backward)(motorDrivers_param*);
+    //Функция движения робота по радиусу вправо-назад
+    void (*turn_right_backward)(motorDrivers_param*);
+    //Функция движения робота вбок влево
+    void (*omni_left)(motorDrivers_param*);
+    //Функция движения робота вбок вправо
+    void (*omni_right)(motorDrivers_param*);
 } motorDrivers_func;
 
 #endif

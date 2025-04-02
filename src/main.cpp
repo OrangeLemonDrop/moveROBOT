@@ -44,4 +44,52 @@ void loop()
     mDriver_func.backward(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Spin Left...");
+    // Запуск вращения робота вокруг своей оси против часовой
+    mDriver_func.spin_left(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Spin Right...");
+    // Запуск робота вокруг своей оси по часовой
+    mDriver_func.spin_right(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Turn Left Forward...");
+    //Поворот робота по заданному радиусу влево-вперёд
+    mDriver_func.turn_left_forward(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Turn Right Forward...");
+    //Поворот робота по заданному радиусу вправо-вперёд
+    mDriver_func.turn_right_forward(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Turn Left Backward...");
+    //Поворот робота по заданному радиусу влево-назад
+    mDriver_func.turn_left_backward(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Turn Right Backward...");
+    //Поворот робота по заданному радиусу вправо-назад
+    mDriver_func.turn_right_backward(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Omni Left...");
+    //Движение робота влево боком
+    mDriver_func.omni_left(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
+    // Вывод по UART (в монитор порта, если подключено к ПК)
+    Serial.println("Omni Right...");
+    //Движение робота вправо боком
+    mDriver_func.omni_right(&mDriver_dat);
+    // Бездействие в течении указанных мс
+    delay(100);
 }

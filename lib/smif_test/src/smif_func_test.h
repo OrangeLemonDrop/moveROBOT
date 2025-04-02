@@ -160,6 +160,14 @@ static motorDrivers_func mDriver_func = {
     .stop = driversStop,
     .forward = driversForward,
     .backward = driversBackward,
+    .spin_left = driversSpinLeft,
+    .spin_right = driversSpinRight,
+    .turn_left_forward = driversTLF,
+    .turn_right_forward = driversTRF,
+    .turn_left_backward = driversTLB,
+    .turn_right_backward = driversTRB,
+    .omni_left = driversOmniLeft,
+    .omni_right = driversOmniRight,
 };
 
 #endif
