@@ -18,7 +18,7 @@
 
 
 // Функция выполнения вращения
-void motorMove(const driver_pins *bts7960_pins,
+void motorMove(const driver_pins_io *bts7960_pins,
                motor_driver_param *bts7960_data)
 {
     // Если питание left активирано
@@ -70,7 +70,7 @@ void motorMove(const driver_pins *bts7960_pins,
 }
 
 // Функция выполнения остановки вращения
-void motorStop(const driver_pins *bts7960_pins,
+void motorStop(const driver_pins_io *bts7960_pins,
                motor_driver_param *bts7960_data)
 {
     // Питание обмоток ДПТ не активирано
@@ -141,10 +141,10 @@ void driversInit(motorDrivers_param *moveData, motor_driver_func *moveFunc)
 void driversStop(motorDrivers_param *moveData)
 {
     // Структура параметров I/O
-    driver_pins *pins_0 = moveData->driver_pins[0];
-    driver_pins *pins_1 = moveData->driver_pins[1];
-    driver_pins *pins_2 = moveData->driver_pins[2];
-    driver_pins *pins_3 = moveData->driver_pins[3];
+    driver_pins_io *pins_0 = moveData->driver_pins[0];
+    driver_pins_io *pins_1 = moveData->driver_pins[1];
+    driver_pins_io *pins_2 = moveData->driver_pins[2];
+    driver_pins_io *pins_3 = moveData->driver_pins[3];
     // Структура параметров контроллера ДПТ
     motor_driver_param *dr_par_0 = moveData->driver[0];
     motor_driver_param *dr_par_1 = moveData->driver[1];
@@ -166,7 +166,7 @@ void driversStop(motorDrivers_param *moveData)
     moveData->driver[3] = dr_par_3;
 }
 
-// Функция задания запуска вращения по часовой
+// Функция запуска движения робота вперёд
 void driversForward(motorDrivers_param *moveData)
 {
 
@@ -174,20 +174,20 @@ void driversForward(motorDrivers_param *moveData)
     if (motion_type == FORWARD)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
         motor_driver_param *dr_par_2 = moveData->driver[2];
         motor_driver_param *dr_par_3 = moveData->driver[3];
         // Установка коэф. заполнения импулься ШИМ
-        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) / 255);
-        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) / 255);
-        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);
+        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255);
+        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
         // Установка сигнала EN для вращения по часовой
         dr_par_0->en = DRIVER_PWR_L_POWER;
         dr_par_1->en = DRIVER_PWR_L_POWER;
@@ -239,7 +239,7 @@ void driversForward(motorDrivers_param *moveData)
     }
 }
 
-// Функция задания запуска вращения против часовой
+// Функция запуска движения робота назад
 void driversBackward(motorDrivers_param *moveData)
 {
 
@@ -247,20 +247,20 @@ void driversBackward(motorDrivers_param *moveData)
     if (motion_type == BACKWARD)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
         motor_driver_param *dr_par_2 = moveData->driver[2];
         motor_driver_param *dr_par_3 = moveData->driver[3];
         // Установка коэф. заполнения импулься ШИМ
-        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) / 255);
-        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) / 255);
-        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);
+        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255);
+        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
 
         // Установка сигнала EN для вращения против часовой
         dr_par_0->en = DRIVER_PWR_R_POWER;
@@ -311,7 +311,7 @@ void driversBackward(motorDrivers_param *moveData)
     }
 }
 
-// Функция поворота вокруг своей оси влево
+//Функция запуска вращения робота вокруг своей оси против часовой
 void driversSpinLeft(motorDrivers_param *moveData)
 {
 
@@ -319,20 +319,20 @@ void driversSpinLeft(motorDrivers_param *moveData)
     if (motion_type == SPIN_LEFT)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
         motor_driver_param *dr_par_2 = moveData->driver[2];
         motor_driver_param *dr_par_3 = moveData->driver[3];
         // Установка коэф. заполнения импулься ШИМ
-        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) / 255);
-        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) / 255);
-        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);
+        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255);
+        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
 
         // Установка сигнала EN для вращения 
         dr_par_0->en = DRIVER_PWR_L_POWER;
@@ -383,7 +383,7 @@ void driversSpinLeft(motorDrivers_param *moveData)
     }
 }
 
-// Функция поворота вокруг своей оси вправо
+// Функция запуска вращения робота вокруг своей оси по часовой
 void driversSpinRight(motorDrivers_param *moveData)
 {
 
@@ -391,20 +391,20 @@ void driversSpinRight(motorDrivers_param *moveData)
     if (motion_type == SPIN_RIGHT)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
         motor_driver_param *dr_par_2 = moveData->driver[2];
         motor_driver_param *dr_par_3 = moveData->driver[3];
         // Установка коэф. заполнения импулься ШИМ
-        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) / 255);
-        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) / 255);
-        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);
+        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255);
+        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
 
         // Установка сигнала EN для вращения
         dr_par_0->en = DRIVER_PWR_R_POWER;
@@ -455,18 +455,18 @@ void driversSpinRight(motorDrivers_param *moveData)
     }
 }
 
-// Функция поворота налево-вперёд
-void driversTLF(motorDrivers_param *moveData)
+// Функция движения робота по радиусу влево-вперёд
+void driversTurnLeftForward(motorDrivers_param *moveData)
 {
 
     // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_LEFT_FORWARD)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
@@ -479,10 +479,10 @@ void driversTLF(motorDrivers_param *moveData)
         uint8_t k; // инициализация коэффициента
         k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
 
-        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed)*k / 255);
-        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed)*k / 255);  
-        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) / 255); 
-        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed)*k * 0.01 * 255);
+        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed)*k * 0.01 * 255);  
+        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255); 
+        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
 
         // Установка сигнала EN для вращения по часовой
         dr_par_0->en = DRIVER_PWR_L_POWER;
@@ -533,18 +533,18 @@ void driversTLF(motorDrivers_param *moveData)
     }
 }
 
-// Функция поворота направо-вперёд
-void driversTRF(motorDrivers_param *moveData)
+// Функция движения робота по радиусу вправо-вперёд
+void driversTurnRightForward(motorDrivers_param *moveData)
 {
 
     // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_RIGHT_FORWARD)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
@@ -557,10 +557,10 @@ void driversTRF(motorDrivers_param *moveData)
         uint8_t k; // инициализация коэффициента
         k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
 
-        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) / 255);  
-        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed)*k / 255); 
-        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed)*k / 255);
+        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);  
+        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed)*k * 0.01 * 255); 
+        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed)*k * 0.01 * 255);
 
         // Установка сигнала EN для вращения по часовой
         dr_par_0->en = DRIVER_PWR_L_POWER;
@@ -611,18 +611,18 @@ void driversTRF(motorDrivers_param *moveData)
     }
 }
 
-// Функция поворота налево-назад
-void driversTLB(motorDrivers_param *moveData)
+// Функция движения робота по радиусу влево-назад
+void driversTurnLeftBacward(motorDrivers_param *moveData)
 {
 
     // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_LEFT_BACKWARD)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
@@ -635,10 +635,10 @@ void driversTLB(motorDrivers_param *moveData)
         uint8_t k; // инициализация коэффициента
         k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
 
-        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed)*k / 255);
-        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed)*k / 255);  
-        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) / 255); 
-        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed)*k * 0.01 * 255);
+        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed)*k * 0.01 * 255);  
+        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255); 
+        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
 
         // Установка сигнала EN для вращения против часовой
         dr_par_0->en = DRIVER_PWR_R_POWER;
@@ -689,18 +689,18 @@ void driversTLB(motorDrivers_param *moveData)
     }
 }
 
-// Функция поворота направо-назад
-void driversTRB(motorDrivers_param *moveData)
+// Функция движения робота по радиусу вправо-назад
+void driversTurnRightBackward(motorDrivers_param *moveData)
 {
 
     // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_RIGHT_BACKWARD)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
@@ -713,10 +713,10 @@ void driversTRB(motorDrivers_param *moveData)
         uint8_t k; // инициализация коэффициента
         k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
 
-        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) / 255);  
-        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed)*k / 255); 
-        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed)*k / 255);
+        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);  
+        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed)*k * 0.01 * 255); 
+        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed)*k * 0.01 * 255);
 
         // Установка сигнала EN для вращения против часовой
         dr_par_0->en = DRIVER_PWR_R_POWER;
@@ -767,7 +767,7 @@ void driversTRB(motorDrivers_param *moveData)
     }
 }
 
-// Функция движения боком влево
+// Функция движения робота в омни-режиме вбок влево
 void driversOmniLeft(motorDrivers_param *moveData)
 {
 
@@ -775,10 +775,10 @@ void driversOmniLeft(motorDrivers_param *moveData)
     if (motion_type == OMNI_LEFT)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
@@ -786,10 +786,10 @@ void driversOmniLeft(motorDrivers_param *moveData)
         motor_driver_param *dr_par_3 = moveData->driver[3];
         
         // Установка коэф. заполнения импулься ШИМ
-        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) / 255);  
-        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) / 255); 
-        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);  
+        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255); 
+        dr_par_3->r_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
 
         // Установка сигнала EN для вращения против часовой
         dr_par_0->en = DRIVER_PWR_L_POWER;
@@ -840,7 +840,7 @@ void driversOmniLeft(motorDrivers_param *moveData)
     }
 }
 
-// Функция движения боком вправо
+// Функция движения робота в омни-режиме вбок вправо
 void driversOmniRight(motorDrivers_param *moveData)
 {
 
@@ -848,10 +848,10 @@ void driversOmniRight(motorDrivers_param *moveData)
     if (motion_type == OMNI_RIGHT)
     {
         // Структура параметров I/O
-        driver_pins *pins_0 = moveData->driver_pins[0];
-        driver_pins *pins_1 = moveData->driver_pins[1];
-        driver_pins *pins_2 = moveData->driver_pins[2];
-        driver_pins *pins_3 = moveData->driver_pins[3];
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
         // Структура параметров контроллера ДПТ
         motor_driver_param *dr_par_0 = moveData->driver[0];
         motor_driver_param *dr_par_1 = moveData->driver[1];
@@ -859,10 +859,10 @@ void driversOmniRight(motorDrivers_param *moveData)
         motor_driver_param *dr_par_3 = moveData->driver[3];
         
         // Установка коэф. заполнения импулься ШИМ
-        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) / 255);
-        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) / 255);  
-        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) / 255); 
-        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) / 255);
+        dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
+        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);  
+        dr_par_2->r_pwm = (uint8_t)((dr_par_2->speed) * 0.01 * 255); 
+        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) * 0.01 * 255);
 
         // Установка сигнала EN для вращения против часовой
         dr_par_0->en = DRIVER_PWR_R_POWER;

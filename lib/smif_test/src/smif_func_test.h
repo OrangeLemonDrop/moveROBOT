@@ -24,7 +24,7 @@
  * \param [out] bts7960_data Структура данных о управлении драйвером двигателя
  * \return None
  */
-void motorMove(const driver_pins *bts7960_pins,
+void motorMove(const driver_pins_io *bts7960_pins,
                motor_driver_param *bts7960_data);
 
 /**
@@ -33,7 +33,7 @@ void motorMove(const driver_pins *bts7960_pins,
  * \param [out] bts7960_data Структура данных о управлении драйвером двигателя
  * \return None
  */
-void motorStop( const driver_pins *bts7960_pins,
+void motorStop( const driver_pins_io *bts7960_pins,
                 motor_driver_param *bts7960_data);
 
 /**
@@ -54,21 +54,77 @@ void driversInit(   motorDrivers_param *moveData,
 void driversStop(motorDrivers_param *moveData);
 
 /**
- * \brief Выполнение задания запуска вращения по часовой
+ * \brief Выполнение задания запуска вращения для перемещения робота вперёд
  * \param moveData Структура параметров управления двигателем
  * \return None
  */
 void driversForward(motorDrivers_param *moveData);
 
 /**
- * \brief Выполнение задания запуска вращения против часовой
+ * \brief Выполнение задания запуска вращения для перемещения робота назад
  * \param moveData Структура параметров управления двигателем
  * \return None
  */
 void driversBackward(motorDrivers_param *moveData);
 
+/**
+ * \brief Выполнение задания запуска вращения для поворота робота вокруг своей оси влево
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversSpinLeft(motorDrivers_param *moveData);
+
+/**
+ * \brief Выполнение задания запуска вращения для поворота робота вокруг своей оси вправо
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversSpinRight(motorDrivers_param *moveData);
+
+/**
+ * \brief Выполнение задания запуска вращения для поворота робота по заданному радиусу влево-вперёд
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversTurnLeftForward(motorDrivers_param *moveData);
+
+/**
+ * \brief Выполнение задания запуска вращения для поворота робота по заданному радиусу вправо-вперёд
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversTurnRightForward(motorDrivers_param *moveData);
+
+/**
+ * \brief Выполнение задания запуска вращения для поворота робота по заданному радиусу влево-назад
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversTurnLeftBacward(motorDrivers_param *moveData);
+
+/**
+ * \brief Выполнение задания запуска вращения для поворота робота по заданному радиусу вправо-назад
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversTurnRightBackward(motorDrivers_param *moveData);
+
+/**
+ * \brief Выполнение задания запуска вращения для движения робота в омни-режиме боком влево
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversOmniLeft(motorDrivers_param *moveData);
+
+/**
+ * \brief Выполнение задания запуска вращения для движения робота в омни-режиме боком вправо
+ * \param moveData Структура параметров управления двигателем
+ * \return None
+ */
+void driversOmniRight(motorDrivers_param *moveData);
+
 // Структура с номерами I/O МК для драйвера двигателя
-static driver_pins bts7960_pins[4] = {
+static  driver_pins_io bts7960_pins[4] = {
     {
         .l_pwm = 0,
         .r_pwm = 0,
@@ -141,13 +197,13 @@ static motor_driver_param bts7960_dat[4] = {
 };
 
 // Структура функций управления контроллером вращения ДПТ
-static motor_driver_func bts7960_func = {
+motor_driver_func bts7960_func = {
     .move = motorMove,
     .stop = motorStop,
 };
 
 // Структура параметров управления двигателем
-static motorDrivers_param mDriver_dat = 
+motorDrivers_param mDriver_dat = 
 {
     .driver_pins = bts7960_pins,
     .driver = bts7960_dat,
@@ -162,10 +218,10 @@ static motorDrivers_func mDriver_func = {
     .backward = driversBackward,
     .spin_left = driversSpinLeft,
     .spin_right = driversSpinRight,
-    .turn_left_forward = driversTLF,
-    .turn_right_forward = driversTRF,
-    .turn_left_backward = driversTLB,
-    .turn_right_backward = driversTRB,
+    .turn_left_forward = driversTurnLeftForward,
+    .turn_right_forward = driversTurnRightForward,
+    .turn_left_backward = driversTurnLeftBacward,
+    .turn_right_backward = driversTurnRightBackward,
     .omni_left = driversOmniLeft,
     .omni_right = driversOmniRight,
 };

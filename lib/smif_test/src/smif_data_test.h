@@ -69,7 +69,7 @@ typedef struct
     uint8_t r_en;   // Пин МК для R_EN
     uint8_t l_is;   // Пин МК для L_IS
     uint8_t r_is;   // Пин МК для R_IS
-} driver_pins;
+} driver_pins_io;
 
 /**
  * \brief Структура с параметрами контроллера вращения ДПТ
@@ -97,9 +97,9 @@ typedef struct
 typedef struct
 {
     // Функция выполнения вращения
-    void (*move)(const driver_pins*, motor_driver_param*);
+    void (*move)(const driver_pins_io*, motor_driver_param*);
     // Функция выполнения остановки вращения
-    void (*stop)(const driver_pins*, motor_driver_param*);
+    void (*stop)(const driver_pins_io*, motor_driver_param*);
 } motor_driver_func;
 
 /**
@@ -110,7 +110,7 @@ typedef struct
  */
 typedef struct
 {
-    driver_pins* driver_pins[4];
+    driver_pins_io* driver_pins[4];
     motor_driver_param* driver[4];
     motor_driver_func* motor_func;
     uint8_t turn_radius;
@@ -121,8 +121,16 @@ typedef struct
  * механизма
  * \param init(...) Функция инициализции данных и настройки I/O
  * \param stop(...) Функция задания остановки вращения
- * \param forward(...) Функция задания запуска вращения по часовой
- * \param backward(...) Функция задания запуска вращения против часовой
+ * \param forward(...) Функция запуска движения робота вперёд
+ * \param backward(...) Функция запуска движения робота назад
+ * \param spin_left(...) Функция запуска вращения робота вокруг своей оси против часовой
+ * \param spin_right(...) Функция запуска вращения робота вокруг своей оси по часовой
+ * \param turn_left_forward(...) Функция движения робота по радиусу влево-вперёд
+ * \param turn_right_forward(...) Функция движения робота по радиусу вправо-вперёд
+ * \param turn_left_backward(...) Функция движения робота по радиусу влево-назад
+ * \param turn_right_backward(...) Функция движения робота по радиусу вправо-назад
+ * \param omni_left(...) Функция движения робота в омни-режиме вбок влево
+ * \param omni_right(...) Функция движения робота в омни-режиме вбок вправо
  */
 typedef struct
 {
@@ -134,21 +142,21 @@ typedef struct
     void (*forward)(motorDrivers_param*);
     // Функция запуска движения робота назад
     void (*backward)(motorDrivers_param*);
-    //Функция запуска вращения робота вокруг своей оси против часовой
+    // Функция запуска вращения робота вокруг своей оси против часовой
     void (*spin_left)(motorDrivers_param*);
-    //Функция запуска вращения робота вокруг своей оси по часовой
+    // Функция запуска вращения робота вокруг своей оси по часовой
     void (*spin_right)(motorDrivers_param*);
-    //Функция движения робота по радиусу влево-вперёд
+    // Функция движения робота по радиусу влево-вперёд
     void (*turn_left_forward)(motorDrivers_param*);
-    //Функция движения робота по радиусу вправо-вперёд
+    // Функция движения робота по радиусу вправо-вперёд
     void (*turn_right_forward)(motorDrivers_param*);
-    //Функция движения робота по радиусу влево-назад
+    // Функция движения робота по радиусу влево-назад
     void (*turn_left_backward)(motorDrivers_param*);
-    //Функция движения робота по радиусу вправо-назад
+    // Функция движения робота по радиусу вправо-назад
     void (*turn_right_backward)(motorDrivers_param*);
-    //Функция движения робота вбок влево
+    // Функция движения робота в омни-режиме вбок влево
     void (*omni_left)(motorDrivers_param*);
-    //Функция движения робота вбок вправо
+    // Функция движения робота в омни-режиме вбок вправо
     void (*omni_right)(motorDrivers_param*);
 } motorDrivers_func;
 
