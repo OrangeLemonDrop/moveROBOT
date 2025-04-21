@@ -197,13 +197,13 @@ static motor_driver_param bts7960_dat[4] = {
 };
 
 // Структура функций управления контроллером вращения ДПТ
-motor_driver_func bts7960_func = {
+static motor_driver_func bts7960_func = {
     .move = motorMove,
     .stop = motorStop,
 };
 
 // Структура параметров управления двигателем
-motorDrivers_param mDriver_dat = 
+static motorDrivers_param mDriver_dat = 
 {
     .driver_pins = bts7960_pins,
     .driver = bts7960_dat,
