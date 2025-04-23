@@ -124,7 +124,7 @@ void driversOmniLeft(motorDrivers_param *moveData);
 void driversOmniRight(motorDrivers_param *moveData);
 
 // Структура с номерами I/O МК для драйвера двигателя
-static  driver_pins_io bts7960_pins[4] = {
+static  driver_pins_io pins[4] = {
     {
         /* .l_pwm =*/ 0,
         /* .r_pwm =*/ 0,
@@ -159,9 +159,10 @@ static  driver_pins_io bts7960_pins[4] = {
     }
     
 };
+static driver_pins_io* bts7960_pins[4] = { &pins[0],&pins[1],&pins[2],&pins[3]};
 
 // Структура с параметрами контроллера вращения ДПТ
-static motor_driver_param bts7960_dat[4] = {
+static motor_driver_param dat[4] = {
     {
         .l_pwm = 0,
         .r_pwm = 0,
