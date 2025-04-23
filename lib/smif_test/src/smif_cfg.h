@@ -21,7 +21,7 @@
 
 // Переменная для получения команд от пользователя
 //static volatile 
-uint8_t motion_type = 0;
+static uint8_t motion_type = 0;
 
 // define the number of bytes you want to access
 #define EEPROM_SIZE 25

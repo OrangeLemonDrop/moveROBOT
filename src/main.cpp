@@ -35,8 +35,8 @@ void setup()
     EEPROM.write(4, 0xFF);
     EEPROM.write(5, 0xFF);
     EEPROM.write(6, 0xFF); */
-    EEPROM.write(7, 6);
-    EEPROM.write(8, 7);
+    EEPROM.write(7, 42);
+    EEPROM.write(8, 1);
 /*     EEPROM.write(9, 0xFF);
     EEPROM.write(10, 0xFF);
     EEPROM.write(11, 0xFF);
@@ -47,8 +47,8 @@ void setup()
     EEPROM.write(16, 0xFF);
     EEPROM.write(17, 0xFF);
     EEPROM.write(18, 0xFF); */
-    EEPROM.write(19, 42);
-    EEPROM.write(20, 1);
+    EEPROM.write(19, 6);
+    EEPROM.write(20, 7);
 /*     EEPROM.write(21, 0xFF);
     EEPROM.write(22, 0xFF);
     EEPROM.write(23, 0xFF);
@@ -60,93 +60,83 @@ void setup()
 void loop()
 {
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Forward...");
-    motion_type = FORWARD;
+    //Serial.println("Forward...");
     // Запуск движения вперёд
     mDriver_func.forward(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Backward...");
-    motion_type = BACKWARD;
+    //Serial.println("Backward...");
     // Запуск движения назад
     mDriver_func.backward(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Spin Left...");
-    motion_type = SPIN_LEFT;
+    //Serial.println("Spin Left...");
     // Запуск вращения робота вокруг своей оси против часовой
     mDriver_func.spin_left(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Spin Right...");
-    motion_type = SPIN_RIGHT;
+    //Serial.println("Spin Right...");
     // Запуск робота вокруг своей оси по часовой
     mDriver_func.spin_right(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Turn Left Forward...");
-    motion_type = TURN_LEFT_FORWARD;
+    //Serial.println("Turn Left Forward...");
     // Поворот робота по заданному радиусу влево-вперёд
     mDriver_func.turn_left_forward(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Turn Right Forward...");
-    motion_type = TURN_RIGHT_FORWARD;
+    //Serial.println("Turn Right Forward...");
     // Поворот робота по заданному радиусу вправо-вперёд
     mDriver_func.turn_right_forward(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Turn Left Backward...");
-    motion_type = TURN_LEFT_BACKWARD;
+    //Serial.println("Turn Left Backward...");
     // Поворот робота по заданному радиусу влево-назад
     mDriver_func.turn_left_backward(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Turn Right Backward...");
-    motion_type = TURN_RIGHT_BACKWARD;
+    //Serial.println("Turn Right Backward...");
     // Поворот робота по заданному радиусу вправо-назад
     mDriver_func.turn_right_backward(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Omni Left...");
-    motion_type = OMNI_LEFT;
+    //Serial.println("Omni Left...");
     // Движение робота влево боком
     mDriver_func.omni_left(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(1000);
     // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Omni Right...");
-    motion_type = OMNI_RIGHT;
+    //Serial.println("Omni Right...");
     // Движение робота вправо боком
     mDriver_func.omni_right(&mDriver_dat);
     // Бездействие в течении указанных мс
     delay(3000);
-    motion_type = STOP;
+    mDriver_func.stop(&mDriver_dat);
     delay(3000);
 }

@@ -124,38 +124,38 @@ void driversOmniLeft(motorDrivers_param *moveData);
 void driversOmniRight(motorDrivers_param *moveData);
 
 // Структура с номерами I/O МК для драйвера двигателя
-static driver_pins_io bts7960_pins[4] = {
+static  driver_pins_io bts7960_pins[4] = {
     {
-        .l_pwm = 0,
-        .r_pwm = 0,
-        .l_en = 0,
-        .r_en = 0,
-        .l_is = 0,
-        .r_is = 0,
+        /* .l_pwm =*/ 0,
+        /* .r_pwm =*/ 0,
+        /* .l_en = */0,
+        /* .r_en = */0,
+        /* .l_is = */0,
+        /* .r_is = */0,
     },
     {
-        .l_pwm = 0,
-        .r_pwm = 0,
-        .l_en = 0,
-        .r_en = 0,
-        .l_is = 0,
-        .r_is = 0,
+        /* .l_pwm =*/ 0,
+        /* .r_pwm =*/ 0,
+       /* .l_en = */ 0,
+       /* .r_en = */ 0,
+       /* .l_is = */ 0,
+       /* .r_is = */ 0,
     },
     {
-        .l_pwm = 0,
-        .r_pwm = 0,
-        .l_en = 0,
-        .r_en = 0,
-        .l_is = 0,
-        .r_is = 0,
+        /* .l_pwm =*/0,
+        /* .r_pwm =*/0,
+        /* .l_en = */0,
+        /* .r_en = */0,
+        /* .l_is = */0,
+        /* .r_is = */0,
     },
     {
-        .l_pwm = 0,
-        .r_pwm = 0,
-        .l_en = 0,
-        .r_en = 0,
-        .l_is = 0,
-        .r_is = 0,
+        /* .l_pwm =*/0,
+        /* .r_pwm =*/0,
+        /* .l_en = */0,
+        /* .r_en = */0,
+        /* .l_is = */0,
+        /* .r_is = */0,
     }
     
 };
@@ -167,7 +167,7 @@ static motor_driver_param bts7960_dat[4] = {
         .r_pwm = 0,
         .l_is = 0,
         .r_is = 0,
-        .speed = 0,
+        .speed = 70,
         .en = DRIVER_PWR_NO_POWER,
     },
     {
@@ -175,7 +175,7 @@ static motor_driver_param bts7960_dat[4] = {
         .r_pwm = 0,
         .l_is = 0,
         .r_is = 0,
-        .speed = 0,
+        .speed = 70,
         .en = DRIVER_PWR_NO_POWER,
     },
     {
@@ -183,7 +183,7 @@ static motor_driver_param bts7960_dat[4] = {
         .r_pwm = 0,
         .l_is = 0,
         .r_is = 0,
-        .speed = 0,
+        .speed = 70,
         .en = DRIVER_PWR_NO_POWER,
     },
     {
@@ -191,10 +191,11 @@ static motor_driver_param bts7960_dat[4] = {
         .r_pwm = 0,
         .l_is = 0,
         .r_is = 0,
-        .speed = 0,
+        .speed = 70,
         .en = DRIVER_PWR_NO_POWER,
     }
 };
+
 
 // Структура функций управления контроллером вращения ДПТ
 static motor_driver_func bts7960_func = {
@@ -203,11 +204,10 @@ static motor_driver_func bts7960_func = {
 };
 
 // Структура параметров управления двигателем
-static motorDrivers_param mDriver_dat = 
-{
-    .driver_pins = bts7960_pins,
-    .driver = bts7960_dat,
-    .motor_func = &bts7960_func,
+static motorDrivers_param mDriver_dat = {
+    /*.driver_pins =*/ { &bts7960_pins[0],&bts7960_pins[1],&bts7960_pins[2],&bts7960_pins[3]},
+    /*.driver      =*/ {&bts7960_dat[0],&bts7960_dat[1],&bts7960_dat[2],&bts7960_dat[3]},
+    /*.motor_func  =*/ &bts7960_func
 };
 
 // Структура функций управления двигателем в составе поворотного механизма

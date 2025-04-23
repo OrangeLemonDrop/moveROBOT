@@ -140,39 +140,75 @@ void driversInit(motorDrivers_param *moveData, motor_driver_func *moveFunc)
 // Функция задания остановки вращения
 void driversStop(motorDrivers_param *moveData)
 {
-    // Структура параметров I/O
-    driver_pins_io *pins_0 = moveData->driver_pins[0];
-    driver_pins_io *pins_1 = moveData->driver_pins[1];
-    driver_pins_io *pins_2 = moveData->driver_pins[2];
-    driver_pins_io *pins_3 = moveData->driver_pins[3];
-    // Структура параметров контроллера ДПТ
-    motor_driver_param *dr_par_0 = moveData->driver[0];
-    motor_driver_param *dr_par_1 = moveData->driver[1];
-    motor_driver_param *dr_par_2 = moveData->driver[2];
-    motor_driver_param *dr_par_3 = moveData->driver[3];
-    // Включение buid-in RGB-LED
-    neopixelWrite(48, 0xFF, 0x00, 0x00);
-    // Вывод по UART (в монитор порта, если подключено к ПК)
-    Serial.println("Was stoped...");
-    // Запуска процесса остановки работы ДПТ
-    moveData->motor_func->stop(pins_0, dr_par_0);
-    moveData->motor_func->stop(pins_0, dr_par_1);
-    moveData->motor_func->stop(pins_0, dr_par_2);
-    moveData->motor_func->stop(pins_0, dr_par_3);
-    // Сохранение изменений в структуру параметров
-    moveData->driver[0] = dr_par_0;
-    moveData->driver[1] = dr_par_1;
-    moveData->driver[2] = dr_par_2;
-    moveData->driver[3] = dr_par_3;
+    Serial.println("Stop...");
+    // Условие для запуска вращения вала ДПТ
+    //if (motion_type == FORWARD)
+    //{
+        // Структура параметров I/O
+        driver_pins_io *pins_0 = moveData->driver_pins[0];
+        driver_pins_io *pins_1 = moveData->driver_pins[1];
+        driver_pins_io *pins_2 = moveData->driver_pins[2];
+        driver_pins_io *pins_3 = moveData->driver_pins[3];
+        // Структура параметров контроллера ДПТ
+        motor_driver_param *dr_par_0 = moveData->driver[0];
+        motor_driver_param *dr_par_1 = moveData->driver[1];
+        motor_driver_param *dr_par_2 = moveData->driver[2];
+        motor_driver_param *dr_par_3 = moveData->driver[3];
+        // Установка коэф. заполнения импулься ШИМ
+        dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) * 0 * 255);
+        dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) * 0 * 255);
+        dr_par_2->l_pwm = (uint8_t)((dr_par_2->speed) * 0 * 255);
+        dr_par_3->l_pwm = (uint8_t)((dr_par_3->speed) * 0 * 255);
+        // Установка сигнала EN для вращения по часовой
+        dr_par_0->en = DRIVER_PWR_NO_POWER;
+        dr_par_1->en = DRIVER_PWR_NO_POWER;
+        dr_par_2->en = DRIVER_PWR_NO_POWER;
+        dr_par_3->en = DRIVER_PWR_NO_POWER;
+
+        /* Begin SMIF area */
+
+        // Включение buid-in RGB-LED
+        neopixelWrite(48, 0xFF, 0x00, 0xFF);
+        // Запуск вращения ДПТ
+        moveData->motor_func->move(pins_0, dr_par_0);
+        moveData->motor_func->move(pins_1, dr_par_1);
+        moveData->motor_func->move(pins_2, dr_par_2);
+        moveData->motor_func->move(pins_3, dr_par_3);
+
+        /* while (true)
+        {
+
+            // Вывод по UART (в монитор порта, если подключено к ПК)
+            Serial.print("Forward moving, stop: ");
+            // Вывод по UART (в монитор порта, если подключено к ПК)
+            Serial.println(String(STOP));
+
+            // Условие окончания работы ДПТ
+            if (motion_type == STOP)
+            {
+                // Запуска процесса остановки работы ДПТ
+                moveData->motor_func->stop(pins_0, dr_par_0);
+                moveData->motor_func->stop(pins_0, dr_par_1);
+                moveData->motor_func->stop(pins_0, dr_par_2);
+                moveData->motor_func->stop(pins_0, dr_par_3);
+                break;
+            }
+        } */
+
+        // Сохранение изменений в структуру параметров
+        moveData->driver[0] = dr_par_0;
+        moveData->driver[1] = dr_par_1;
+        moveData->driver[2] = dr_par_2;
+        moveData->driver[3] = dr_par_3;
 }
 
 // Функция запуска движения робота вперёд
 void driversForward(motorDrivers_param *moveData)
 {
-
+    Serial.println("Forward...");
     // Условие для запуска вращения вала ДПТ
-    if (motion_type == FORWARD)
-    {
+    //if (motion_type == FORWARD)
+    //{
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -204,7 +240,7 @@ void driversForward(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
 
             // Вывод по UART (в монитор порта, если подключено к ПК)
@@ -222,7 +258,7 @@ void driversForward(motorDrivers_param *moveData)
                 moveData->motor_func->stop(pins_0, dr_par_3);
                 break;
             }
-        }
+        } */
 
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
@@ -231,21 +267,21 @@ void driversForward(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
-    else
+    //}
+    /* else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция запуска движения робота назад
 void driversBackward(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Backward...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == BACKWARD)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -278,7 +314,7 @@ void driversBackward(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("Backward moving, stop: ");
@@ -294,7 +330,7 @@ void driversBackward(motorDrivers_param *moveData)
                 moveData->motor_func->stop(pins_0, dr_par_3);
                 break;
             }
-        }
+        } */
 
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
@@ -303,21 +339,21 @@ void driversBackward(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
-    else
+    //}
+    /* else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 //Функция запуска вращения робота вокруг своей оси против часовой
 void driversSpinLeft(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Spin Left...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == SPIN_LEFT)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -350,7 +386,7 @@ void driversSpinLeft(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("SpinL moving, stop: ");
@@ -366,7 +402,7 @@ void driversSpinLeft(motorDrivers_param *moveData)
                 moveData->motor_func->stop(pins_0, dr_par_3);
                 break;
             }
-        }
+        } */
 
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
@@ -375,21 +411,21 @@ void driversSpinLeft(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция запуска вращения робота вокруг своей оси по часовой
 void driversSpinRight(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Spin Right...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == SPIN_RIGHT)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -422,7 +458,7 @@ void driversSpinRight(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("SpinR moving, stop: ");
@@ -438,7 +474,7 @@ void driversSpinRight(motorDrivers_param *moveData)
                 moveData->motor_func->stop(pins_0, dr_par_3);
                 break;
             }
-        }
+        } */
 
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
@@ -447,21 +483,21 @@ void driversSpinRight(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция движения робота по радиусу влево-вперёд
 void driversTurnLeftForward(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Turn Left Forward...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_LEFT_FORWARD)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -474,10 +510,10 @@ void driversTurnLeftForward(motorDrivers_param *moveData)
         motor_driver_param *dr_par_3 = moveData->driver[3];
         
         // Установка коэф. заполнения импулься ШИМ
-        
+        // moveData->turn_radius = 40;
         //ПЕРЕНЕСТИ В ОТДЕЛЬНЫЙ ФАЙЛ!!!!!!!!
         uint8_t k; // инициализация коэффициента
-        k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
+        k = (sqrt((40+10)*(40+10)+17*17))/(sqrt(40-10)*(40-10)+17*17);
 
         dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed)*k * 0.01 * 255);
         dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed)*k * 0.01 * 255);  
@@ -500,7 +536,7 @@ void driversTurnLeftForward(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("TurnLF moving, stop: ");
@@ -516,7 +552,7 @@ void driversTurnLeftForward(motorDrivers_param *moveData)
                 moveData->motor_func->stop(pins_0, dr_par_3);
                 break;
             }
-        }
+        } */
 
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
@@ -525,21 +561,21 @@ void driversTurnLeftForward(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция движения робота по радиусу вправо-вперёд
 void driversTurnRightForward(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Turn Right Forward...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_RIGHT_FORWARD)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -552,10 +588,10 @@ void driversTurnRightForward(motorDrivers_param *moveData)
         motor_driver_param *dr_par_3 = moveData->driver[3];
         
         // Установка коэф. заполнения импулься ШИМ
-        
+        // moveData->turn_radius = 40;
         //ПЕРЕНЕСТИ В ОТДЕЛЬНЫЙ ФАЙЛ!!!!!!!!
         uint8_t k; // инициализация коэффициента
-        k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
+        k = (sqrt((40+10)*(40+10)+17*17))/(sqrt(40-10)*(40-10)+17*17);
 
         dr_par_0->l_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
         dr_par_1->l_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);  
@@ -578,7 +614,7 @@ void driversTurnRightForward(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+       /*  while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("TurnRF moving, stop: ");
@@ -595,7 +631,7 @@ void driversTurnRightForward(motorDrivers_param *moveData)
                 break;
             }
         }
-
+ */
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
         moveData->driver[1] = dr_par_1;
@@ -603,21 +639,21 @@ void driversTurnRightForward(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция движения робота по радиусу влево-назад
 void driversTurnLeftBacward(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Turn Left Backward...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_LEFT_BACKWARD)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -630,10 +666,10 @@ void driversTurnLeftBacward(motorDrivers_param *moveData)
         motor_driver_param *dr_par_3 = moveData->driver[3];
         
         // Установка коэф. заполнения импулься ШИМ
-        
+        // moveData->turn_radius = 40;
         //ПЕРЕНЕСТИ В ОТДЕЛЬНЫЙ ФАЙЛ!!!!!!!!
         uint8_t k; // инициализация коэффициента
-        k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
+        k = (sqrt((40+10)*(40+10)+17*17))/(sqrt(40-10)*(40-10)+17*17);
 
         dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed)*k * 0.01 * 255);
         dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed)*k * 0.01 * 255);  
@@ -656,7 +692,7 @@ void driversTurnLeftBacward(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("TurnLB moving, stop: ");
@@ -672,7 +708,7 @@ void driversTurnLeftBacward(motorDrivers_param *moveData)
                 moveData->motor_func->stop(pins_0, dr_par_3);
                 break;
             }
-        }
+        } */
 
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
@@ -681,21 +717,21 @@ void driversTurnLeftBacward(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция движения робота по радиусу вправо-назад
 void driversTurnRightBackward(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Turn Right Backward...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == TURN_RIGHT_BACKWARD)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -708,10 +744,10 @@ void driversTurnRightBackward(motorDrivers_param *moveData)
         motor_driver_param *dr_par_3 = moveData->driver[3];
         
         // Установка коэф. заполнения импулься ШИМ
-        
+        //moveData->turn_radius = 40;
         //ПЕРЕНЕСТИ В ОТДЕЛЬНЫЙ ФАЙЛ!!!!!!!!
         uint8_t k; // инициализация коэффициента
-        k = (sqrt((moveData->turn_radius+10)*(moveData->turn_radius+10)+17*17))/(sqrt(moveData->turn_radius-10)*(moveData->turn_radius-10)+17*17);
+        k = (sqrt((40+10)*(40+10)+17*17))/(sqrt(40-10)*(40-10)+17*17);
 
         dr_par_0->r_pwm = (uint8_t)((dr_par_0->speed) * 0.01 * 255);
         dr_par_1->r_pwm = (uint8_t)((dr_par_1->speed) * 0.01 * 255);  
@@ -734,7 +770,7 @@ void driversTurnRightBackward(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("TurnRB moving, stop: ");
@@ -750,7 +786,7 @@ void driversTurnRightBackward(motorDrivers_param *moveData)
                 moveData->motor_func->stop(pins_0, dr_par_3);
                 break;
             }
-        }
+        } */
 
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
@@ -759,21 +795,21 @@ void driversTurnRightBackward(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция движения робота в омни-режиме вбок влево
 void driversOmniLeft(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Omni Left...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == OMNI_LEFT)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -807,7 +843,7 @@ void driversOmniLeft(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+        /* while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("Omni Left moving, stop: ");
@@ -824,7 +860,7 @@ void driversOmniLeft(motorDrivers_param *moveData)
                 break;
             }
         }
-
+ */
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
         moveData->driver[1] = dr_par_1;
@@ -832,21 +868,21 @@ void driversOmniLeft(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
 
 // Функция движения робота в омни-режиме вбок вправо
 void driversOmniRight(motorDrivers_param *moveData)
 {
-
-    // Условие для запуска вращения вала ДПТ
+    Serial.println("Omni Right...");
+    /* // Условие для запуска вращения вала ДПТ
     if (motion_type == OMNI_RIGHT)
-    {
+    { */
         // Структура параметров I/O
         driver_pins_io *pins_0 = moveData->driver_pins[0];
         driver_pins_io *pins_1 = moveData->driver_pins[1];
@@ -880,7 +916,7 @@ void driversOmniRight(motorDrivers_param *moveData)
         moveData->motor_func->move(pins_2, dr_par_2);
         moveData->motor_func->move(pins_3, dr_par_3);
 
-        while (true)
+   /*      while (true)
         {
             // Вывод по UART (в монитор порта, если подключено к ПК)
             Serial.print("Omni Right moving, stop: ");
@@ -897,7 +933,7 @@ void driversOmniRight(motorDrivers_param *moveData)
                 break;
             }
         }
-
+ */
         // Сохранение изменений в структуру параметров
         moveData->driver[0] = dr_par_0;
         moveData->driver[1] = dr_par_1;
@@ -905,10 +941,10 @@ void driversOmniRight(motorDrivers_param *moveData)
         moveData->driver[3] = dr_par_3;
 
         /* End SMIF area */
-    }
+    /* }
     else
     {
         // Ассемблерная вставка “Nо OPeration“, холостой такт процессора
         asm("nop"); // Пропуск времени t = 1 / F_CPU, (секунд)
-    }
+    } */
 }
